@@ -21,3 +21,7 @@ const subjectFileUpload = fileUpload.fields([
   { name: "subject_file", maxCount: 1 },
   //   { name: "images", maxCount: 5 },
 ]);
+
+module.exports = {
+  subjectFileUpload
+}

@@ -4,7 +4,7 @@ const { signUp, fetchAllUser, fetchSingleUser } = require("../controller/user-co
 const { validateSignUp, validation } = require('../middleware/validator');
 const { sendUserEmail, userSessionEmail, userResetPasswordEmail, userEmailPasswordSuccess } = require("../../service/emailTemp");
 const { userExistence } = require("../middleware/user");
-const { loginProcess, loginAttempt, verifyLoginUserToken, logOut, forgetPasswordToken, resetPassword } = require("../controller/userAuthController");
+const { loginProcess, loginAttempt, verifyLoginUserToken, logOut, forgetPasswordToken, resetPassword } = require("../controller/userAuth-Controller");
 
 router.post("/sign-up", validateSignUp, validation, userExistence, signUp, sendUserEmail);
 router.get('/allUser', fetchAllUser);

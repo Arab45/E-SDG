@@ -10,7 +10,7 @@ const librarySchema = new Schema({
     resourceName: {
         type: String,
     },
-    file: {
+    subject_file: {
         type: String,
     }
 });
