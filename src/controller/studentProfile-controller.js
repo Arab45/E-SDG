@@ -5,8 +5,8 @@ const StudentProfile = require("../model/StudentProfile");
 const createStudentProfile = async (req, res) => {
     try {
         const newProfile = new StudentProfile({ ...req.body });
-        await newProfile.save()
-        return sendSuccess(res, "Student Profile created successfully", newProfile)
+       const profile = await newProfile.save()
+        return sendSuccess(res, "Student Profile created successfully", profile)
     } catch (error) {
        console.error(error);
        return sendError(res, "Something went wrong", 500) 
