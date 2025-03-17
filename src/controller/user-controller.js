@@ -16,9 +16,9 @@ const signUp = async (req, res, next) => {
     try {
         await newUser.save();
         // console.log(newUser)
-        return sendSuccess(res, 'successfully register', newUser);
-        // req.body = { newUser };
-        // next();   
+        // return sendSuccess(res, 'successfully register', newUser);
+        req.body = { newUser };
+        next();   
     } catch (error) {
         console.log(error);
         return sendError(res, 'Something when wrong', 500);

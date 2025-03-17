@@ -11,13 +11,14 @@ const loginProcess = async (req, res, next) => {
 
     try {
         const checkuserExist = await User.findOne({ email: logInID })
+
         if (!checkuserExist) {
             return sendError(res, 'email does not exist, signup instead');
         };
         req.body = { logInID, checkuserExist, password }
         next()
     } catch (error) {
-        return sendError(res, 'Something when wronggggg', 500);
+        return sendError(res, 'Something when wrong', 500);
     }
 };
 
@@ -52,42 +53,46 @@ const loginAttempt = async (req, res, next) => {
 const verifyLoginUserToken = (req, res, next) => {
     const cookie = req.headers.cookie;
 
-    if (!cookie) {
-        return sendError(res, 'No cookie found, You are not authorize to access this resource.');
+    if(!cookie){
+        return sendError(res, 'No cookie found, You are not authorized to access this resource.');
     };
 
     const token = cookie.split('=')[1];
-    if (!token) {
+    const isToken = token.split(';')[0];
+    if(!isToken){
         return sendError(res, 'No session cookie found, login first');
     };
 
     //Decoding User token
-    jwt.verify(String(token), process.env.JWT_USER_SECRET, (error, success) => {
-        if (error) {
-            return sendError(res, 'Your session cannot be verified, you are not authorize to access this resource')
+    jwt.verify(String(isToken), process.env.JWT_USER_SECRET, (error, success) => {
+        if(error){
+            // console.error('error from the token', error);
+            return sendError(res, 'Your session cannot be verified, you are not authorized to access this resource')
         };
 
         //custom rquest id
-        req.id = success.userId;
-        next();
+      req.id = success.userId;
+      next();
     })
 };
+
 
 
 const logOut = (req, res) => {
     const cookie = req.headers.cookie;
     if (!cookie) {
-        return sendError(res, 'No cookie found, You are not authorize to access this resource.');
+        return sendError(res, 'No cookie found, You are not authorized to access this resource.');
     };
 
     const token = cookie.split('=')[1];
-    if (!token) {
+    const isToken = token.split(';')[0];
+    if (!isToken) {
         return sendError(res, 'No session cookie found, login first');
     };
 
-    jwt.verify(String(token), process.env.JWT_USER_SECRET, (error, success) => {
+    jwt.verify(String(isToken), process.env.JWT_USER_SECRET, (error, success) => {
         if (error) {
-            return sendError(res, 'Your session cannot be verified, you are not authorize to access this resource')
+            return sendError(res, 'Your session cannot be verified, you are not authorized to access this resource')
         };
 
 

@@ -2,6 +2,9 @@ const sendMail = require("../src/utils/sendMail");
 const { sendSuccess } = require("../src/middleware");
 const { registerEmailTemp } = require("../public/userEmailRegistration");
 const { userSessiontemp } = require("../public/loginSessionTemp");
+const User = require("../src/model/User");
+const { resetPassTemp } = require("../public/forgetPasswordTemp");
+const { resetPasswordSuccessTemp } = require("../public/resetPasswordTemp");
 
 const sendUserEmail = async (req, res) => {
     const { newUser } = req.body;
@@ -22,7 +25,7 @@ const sendUserEmail = async (req, res) => {
 
 const userSessionEmail = async (req, res) => {
     const userId = req.id;
-    // const user = await User.findById(userId);
+    const user = await User.findById(userId);
     console.log(`from nodemailer ${user}`);
     const email = user.email;
     const username = user.username;

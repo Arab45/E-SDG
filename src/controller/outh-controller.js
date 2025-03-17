@@ -12,6 +12,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
 }, async (request, accessToken, refreshToken, profile, done) => {
     // console.log('Google Profile:', profile);
+ 
 
     if (!profile || !profile.id || !profile._json.email) {
         console.log("User denied permission.");
@@ -30,6 +31,7 @@ passport.use(new GoogleStrategy({
             await user.save();
         }
 
+        user.accessToken = accessToken;
         return done(null, user);
     } catch (error) {
         return done(error, null);
@@ -37,16 +39,14 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser((user, done) => {
-    console.log(`my serialize id ${user._id}`);
     done(null, user._id);
 });
 
 passport.deserializeUser(async (_id, done) => {
-    console.log('deserialize id', _id);
     try {
         const user = await OauthUser.findById(_id);
         if (!user) return done(null, false);
-        console.log('Deserialized user:', user);
+        // console.log('Deserialized user:', user);
         done(null, user);
     } catch (error) {
         done(error, null);

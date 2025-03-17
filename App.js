@@ -6,8 +6,10 @@ const passport = require('passport');
 const session = require("express-session")
 const oauthController = require('./src/controller/outh-controller');
 const userRouter = require('./src/router/user-router');
-const userOauthRouter = require("./src/router/userOauth")
+const userOauthRouter = require("./src/router/userOauth-router")
 const cors = require('cors');
+const studentProfile = require('./src/router/studentProfile-router');
+const teacherProfile = require('./src/router/teacherProfile-router')
 
 
 const corsOptions = {
@@ -36,6 +38,9 @@ app.use(passport.session());
 
 app.use('/create', userRouter);
 app.use('/auth', userOauthRouter);
+app.use('/student', studentProfile);
+app.use('/teacher', teacherProfile);
+
 
 
 

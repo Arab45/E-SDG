@@ -10,10 +10,10 @@ router.post("/sign-up", validateSignUp, validation, userExistence, signUp, sendU
 router.get('/allUser', fetchAllUser);
 router.get('/singleUser/:id', fetchSingleUser);
 router.post('/signIn', loginProcess, loginAttempt); 
-router.get('/verifyLogin', verifyLoginUserToken, userSessionEmail );
+router.get('/verifyLogin', verifyLoginUserToken, userSessionEmail);
 router.get('/logout', logOut);
 router.post('/forgetPassword', forgetPasswordToken, userResetPasswordEmail);
-router.get('/reset-password/:token', resetPassword, userEmailPasswordSuccess);
+router.post('/reset-password/:token', resetPassword, userEmailPasswordSuccess);
 
 
 module.exports = router;
