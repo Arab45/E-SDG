@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const profileSchema = new Schema({
+const teacherProfileSchema = new Schema({
     firstNmae: {
         type: String,
         required: true
@@ -28,4 +28,4 @@ const profileSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('TeacherPofile', profileSchema);
+module.exports = mongoose.model('TeacherPofile', teacherProfileSchema);

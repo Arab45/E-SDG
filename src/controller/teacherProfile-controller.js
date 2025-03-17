@@ -1,5 +1,5 @@
 const { sendError, sendSuccess } = require("../middleware/index");
-const TeacherProfile = require("../model/StudentProfile");
+const TeacherProfile = require("../model/TeacherProfile");
 
 
 const createTeacherProfile = async (req, res) => {
@@ -52,7 +52,7 @@ const fetchAllTeacher = async (req, res) => {
               },
           };
 
-          return sendSuccess(res, 'succcessfully fetch teacher data', data, allStudentProfile);
+          return sendSuccess(res, 'succcessfully fetch teacher data', data, allTeacherProfiles);
     } catch (error) {
         console.error(error);
         return sendError(res, 'Unable to perform this action, something went wrong', 500);
