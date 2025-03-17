@@ -8,7 +8,7 @@ const registerEmailTemp = (username) => {
   <title>Congratulation Email</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <div style="background: linear-gradient(to right, #4CAF50, #45a049); padding: 20px; text-align: center;">  
+  <div style="background: linear-gradient(to right, #262a41, #262a41); padding: 20px; text-align: center;">  
   <h1 style="color: white; margin: 0;">SDG</h1>
   </div>
   <div style="background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
