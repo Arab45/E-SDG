@@ -10,7 +10,7 @@ const userOauthRouter = require("./src/router/userOauth-router")
 const cors = require('cors');
 const studentProfile = require('./src/router/studentProfile-router');
 const teacherProfile = require('./src/router/teacherProfile-router')
-
+const library = require('./src/router/library-router')
 
 const corsOptions = {
     credentials: true,
@@ -40,6 +40,7 @@ app.use('/create', userRouter);
 app.use('/auth', userOauthRouter);
 app.use('/student', studentProfile);
 app.use('/teacher', teacherProfile);
+app.use('/api', library);
 
 
 

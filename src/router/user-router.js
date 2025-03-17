@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express();
+const router = express.Router();
 const { signUp, fetchAllUser, fetchSingleUser } = require("../controller/user-controller");
 const { validateSignUp, validation } = require('../middleware/validator');
 const { sendUserEmail, userSessionEmail, userResetPasswordEmail, userEmailPasswordSuccess } = require("../../service/emailTemp");
