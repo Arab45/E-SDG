@@ -15,7 +15,7 @@ const subjectRouter = require('./src/router/subject-router');
 
 const corsOptions = {
     credentials: true,
-    origin: [`http://localhost:${process.env.PORT_NUMBER}`]
+    origin: [`http://localhost:${process.env.PORT_ORIGIN}`]
   };
 
 app.use(cors(corsOptions));
