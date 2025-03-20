@@ -17,7 +17,7 @@ const sendMail = (to, subject, body) => {
     });
 
     const emailBody = {
-        from: `"HEALTH ASSURED" <${process.env.EMAIL_USERNAME}>`,
+        from: `"SDG Edu" <${process.env.EMAIL_USERNAME}>`,
         replyTo: process.env.APP_EMAIL,
         to: to,
         subject: subject,

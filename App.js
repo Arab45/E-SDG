@@ -15,7 +15,10 @@ const subjectRouter = require('./src/router/subject-router');
 
 const corsOptions = {
     credentials: true,
-    origin: [`http://localhost:${process.env.PORT_ORIGIN}`]
+    origin: [
+      `http://localhost:${process.env.PORT_ORIGIN}`,
+      'https://edureach-psi.vercel.app'
+      ]
   };
 
 app.use(cors(corsOptions));
