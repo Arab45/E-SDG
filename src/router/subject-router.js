@@ -3,9 +3,9 @@ const { createSubject, searchSubject, fetchAllSubject, deletedSubject, updateSub
 const router = express.Router();
 
 router.post('/create-subject', createSubject);
-router.get('/search-subject/:search', searchSubject);
+router.get('/search-subject', searchSubject);
 router.get('/fetch-all-subject', fetchAllSubject);
 router.delete('/delete-subject/:id', deletedSubject);
-router.put('/updated-subject', updateSubject);
+router.put('/updated-subject/:id', updateSubject);
 
 module.exports = router;

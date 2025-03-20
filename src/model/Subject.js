@@ -8,8 +8,9 @@ const subjectSchema = new Schema({
     description: {
         type: String,
     },
-    available: {
-        type: String,
+    status: {
+        type: Boolean,
+        default: false
     }
 });
 

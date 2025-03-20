@@ -18,18 +18,21 @@ const createSubject = async (req, res) => {
 };
 
 const searchSubject = async (req, res) => {
-    const { search } = req.query;
     try {
-        if(req.search){
-            let filter = {
+        const { search } = req.query;
+        let filter = {};
+        
+        // Check if search parameter exists in the query (not req.search)
+        if (search) {
+            filter = {
                 $or: [
                     { subjectName: { $regex: search, $options: "i" } }
                 ]
-            }
+            };
         }
 
-        const subject = await Subject.find(filter)
-        return sendSuccess(res, "successfully filter data", subject)
+        const subjects = await Subject.find(filter);
+        return sendSuccess(res, "Successfully filtered data", subjects);
     } catch (error) {
         console.error(error);
         return sendError(res, "Something went wrong", 500);
@@ -39,7 +42,7 @@ const searchSubject = async (req, res) => {
 const updateSubject = async (req, res) => {
     const { id } = req.params;
     try {
-        const subject = await Subject.findByIdAndUpdate(id, {$set: req.body}, {now: true});
+        const subject = await Subject.findByIdAndUpdate(id, {$set: req.body}, {new: true});
         if(!subject){
             return sendError(res, 'Unable to update subject');
         };
@@ -90,7 +93,7 @@ const fetchAllSubject = async (req, res) => {
         if(!subjectDeleted){
             return sendError(res, 'unable to delete subject');
         };
-        return sendSuccess(res, 'successfully delete subject from the database', subjectDeleted);
+        return sendSuccess(res, 'successfully delete subject from the database');
     } catch (error) {
         console.log(error);
         return sendError(res, 'Unable to perform the operation, something went wrong', 500);

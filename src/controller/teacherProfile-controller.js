@@ -16,7 +16,7 @@ const createTeacherProfile = async (req, res) => {
 const updateTeacherProfile = async (req, res) => {
     const { id } = req.params;
     try {
-        const teacherProfile = await TeacherProfile.findByIdAndUpdate(id, {$set: req.body}, {now: true});
+        const teacherProfile = await TeacherProfile.findByIdAndUpdate(id, {$set: req.body}, {new: true});
         if(!teacherProfile){
             return sendError(res, 'Unable to update teacher profile');
         };
