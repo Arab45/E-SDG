@@ -8,7 +8,7 @@ const subjectStorage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(
       null,
-      file.originalname.replace(/[^a-zA-Z0-9_.,]/g, "") +
+      file.originalname.replace(/[^a-zA-Z0-9_.-]/g, "") +
         "_" +
         Date.now() +
         path.extname(file.originalname)
