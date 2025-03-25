@@ -19,9 +19,8 @@ router.get('/google/callback',
         session: true 
     }),   (req, res) => {
         const accessToken = req.user.accessToken;
-        console.log('access token created for user login session', accessToken)
-        console.log('Redirecting after successful login...');
-        res.redirect(`http://localhost:5173?token=${accessToken}`);
+        const clientURL = process.env.CLIENT_URL || "http://localhost:5173";
+        res.redirect(`${clientURL}?token=${accessToken}`);
     }
 );
 
