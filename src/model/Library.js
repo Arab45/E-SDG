@@ -12,7 +12,16 @@ const librarySchema = new Schema({
     },
     subject_file: {
         type: String,
-    }
+    },
+    subject_fileId: {
+        type: String,
+    },
+    avater_image: {
+        type: String,
+    },
+    avater_imageId: {
+        type: String,
+    },
 });
 
 module.exports = mongoose.model("Library", librarySchema);
