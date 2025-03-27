@@ -58,8 +58,8 @@ const updateStudentProfile = async (req, res) => {
                         upload_preset: "SDG-Reach"
                     }
                 );
-                student.subject_img = directUpload.secure_url
-                student.subject_imgId = directUpload.public_id
+                student.student_img = directUpload.secure_url
+                student.student_imgId = directUpload.public_id
             }
         }
 

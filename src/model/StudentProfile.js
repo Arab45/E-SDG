@@ -29,7 +29,7 @@ const profileSchema = new Schema({
     student_img: {
         type: String
     },
-    subject_imgId: {
+    student_imgId: {
         type: String
     }
 });
