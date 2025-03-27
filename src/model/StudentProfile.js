@@ -25,6 +25,12 @@ const profileSchema = new Schema({
     totalCourseEnroll: {
         type: String,
         required: true
+    },
+    student_img: {
+        type: String
+    },
+    subject_imgId: {
+        type: String
     }
 });
 

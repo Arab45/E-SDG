@@ -25,6 +25,12 @@ const teacherProfileSchema = new Schema({
     enrollStudent: {
         type: String,
         required: true
+    },
+    teacher_img: {
+        type: String
+    },
+    teacher_imgId: {
+        type: String
     }
 });
 

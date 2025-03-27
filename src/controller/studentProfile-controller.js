@@ -1,9 +1,31 @@
 const { sendError, sendSuccess } = require("../middleware/index");
 const StudentProfile = require("../model/StudentProfile");
+const { cloudinary } = require("../../service/cloudinary")
 
 
 const createStudentProfile = async (req, res) => {
     try {
+    const studentImg = req.files["student_img"] ? req.files["student_img"][0].path : null;
+
+    if (!studentImg) return sendError(res, "Student image is required");
+
+        // Define file size limit (5MB in bytes)
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+        // Check file size limit
+        if (studentImg.size > MAX_FILE_SIZE) {
+          return sendError(res, "Student image size exceeds the 5MB limit");
+        }
+
+        const studentUpload = await cloudinary.uploader.upload(studentImg, {
+            resource_type: "auto",
+            upload_preset: "SDG-Reach"
+          });
+
+    req.body.student_img = studentUpload.secure_url
+    req.body.student_imgId = studentUpload.public_id
+
+
         const newProfile = new StudentProfile({ ...req.body });
        const profile = await newProfile.save()
         return sendSuccess(res, "Student Profile created successfully", profile)
@@ -15,8 +37,34 @@ const createStudentProfile = async (req, res) => {
 
 const updateStudentProfile = async (req, res) => {
     const { id } = req.params;
+
+        const student = await StudentProfile.findById(id);
+        if (!student) {
+            sendError(res, "cannot find user with id");
+        };
+
     try {
-        const studentProfile = await StudentProfile.findByIdAndUpdate(id, {$set: req.body}, {new: true});
+
+        if (req.files) {
+            if (req.files.student_img) {
+                if (student.student_imgId) {
+                    await cloudinary.uploader.destroy(student.student_img)
+                }
+
+                const directUpload = await cloudinary.uploader.upload(
+                    req.files.student_img[0].path,
+                    {
+                        resource_type: "auto",
+                        upload_preset: "SDG-Reach"
+                    }
+                );
+                student.subject_img = directUpload.secure_url
+                student.subject_imgId = directUpload.public_id
+            }
+        }
+
+
+        const studentProfile = await StudentProfile.findByIdAndUpdate(id, student, {$set: req.body}, {new: true});
         if(!studentProfile){
             return sendError(res, 'Unable to update student profile');
         };

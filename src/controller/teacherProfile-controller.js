@@ -1,9 +1,32 @@
 const { sendError, sendSuccess } = require("../middleware/index");
 const TeacherProfile = require("../model/TeacherProfile");
+const { cloudinary } = require("../../service/cloudinary")
 
 
 const createTeacherProfile = async (req, res) => {
     try {
+
+        const teacherImg = req.files["teacher_img"] ? req.files["teacher_img"][0].path : null;
+
+        if (!teacherImg) return sendError(res, "teacher image is required");
+
+
+        // Define file size limit (5MB in bytes)
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+        // Check file size limit
+        if (teacherImg.size > MAX_FILE_SIZE) {
+            return sendError(res, "teacher image size exceeds the 5MB limit");
+        }
+
+        const subjectUpload = await cloudinary.uploader.upload(teacherImg, {
+            resource_type: "auto",
+            upload_preset: "SDG-Reach"
+        });
+
+        req.body.teacher_img = subjectUpload.secure_url
+        req.body.teacher_imgId = subjectUpload.public_id
+
         const newProfile = new TeacherProfile({ ...req.body });
        const profile = await newProfile.save()
         return sendSuccess(res, "Student Profile created successfully", profile)
@@ -15,8 +38,33 @@ const createTeacherProfile = async (req, res) => {
 
 const updateTeacherProfile = async (req, res) => {
     const { id } = req.params;
+
+            const teacher = await TeacherProfile.findById(id);
+            if (!teacher) {
+                sendError(res, "cannot find teacher with id");
+            };
+
     try {
-        const teacherProfile = await TeacherProfile.findByIdAndUpdate(id, {$set: req.body}, {new: true});
+
+        if (req.files) {
+            if (req.files.teacher_img) {
+                if (teacher.teacher_imgId) {
+                    await cloudinary.uploader.destroy(teacher.student_img)
+                }
+
+                const directUpload = await cloudinary.uploader.upload(
+                    req.files.teacher_img[0].path,
+                    {
+                        resource_type: "auto",
+                        upload_preset: "SDG-Reach"
+                    }
+                );
+                teacher.teacher_img = directUpload.secure_url
+                teacher.teacher_imgId = directUpload.public_id
+            }
+        }
+
+        const teacherProfile = await TeacherProfile.findByIdAndUpdate(id, teacher, {$set: req.body}, {new: true});
         if(!teacherProfile){
             return sendError(res, 'Unable to update teacher profile');
         };
