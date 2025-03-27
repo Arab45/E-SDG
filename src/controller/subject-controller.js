@@ -70,7 +70,7 @@ const updateSubject = async (req, res) => {
     if (!subject) {
         sendError(res, "cannot find user with id");
     };
-
+console.log(subject);
 
     try {
         if (req.files) {
@@ -90,11 +90,11 @@ const updateSubject = async (req, res) => {
                 subject.subject_imgId = directUpload.public_id
             }
         }
-        const subject = await Subject.findByIdAndUpdate(id, subject, { $set: req.body }, { new: true });
-        if (!subject) {
-            return sendError(res, 'Unable to update subject');
-        };
-        return sendSuccess(res, 'successfully update subject', subject);
+        const subjectItem = await Subject.findByIdAndUpdate(id, subject, { $set: req.body }, { new: true });
+        // if (!subject) {
+        //     return sendError(res, 'Unable to update subject');
+        // };
+        return sendSuccess(res, 'successfully update subject', subjectItem);
     } catch (error) {
         console.log(error);
         return sendError(res, 'Unable to perform this action, something went wrong', 500);
