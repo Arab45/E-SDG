@@ -49,7 +49,7 @@ const updateTeacherProfile = async (req, res) => {
         if (req.files) {
             if (req.files.teacher_img) {
                 if (teacher.teacher_imgId) {
-                    await cloudinary.uploader.destroy(teacher.student_img)
+                    await cloudinary.uploader.destroy(teacher.teacher_img)
                 }
 
                 const directUpload = await cloudinary.uploader.upload(
