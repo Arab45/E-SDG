@@ -11,6 +11,12 @@ const subjectSchema = new Schema({
     status: {
         type: Boolean,
         default: false
+    },
+    subject_img: {
+        type: String
+    },
+    subject_imgId: {
+        type: String
     }
 });
 
