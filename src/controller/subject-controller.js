@@ -20,10 +20,6 @@ const createSubject = async (req, res) => {
             return sendError(res, "Subject file size exceeds the 5MB limit");
         }
 
-        if (avatarImage && avatarImage.size > MAX_FILE_SIZE) {
-            return sendError(res, "Avatar image size exceeds the 5MB limit");
-        }
-
         const subjectUpload = await cloudinary.uploader.upload(subjectFile, {
             resource_type: "auto",
             upload_preset: "SDG-Reach"
@@ -33,7 +29,7 @@ const createSubject = async (req, res) => {
         req.body.subject_imgId = subjectUpload.public_id
 
 
-        const newSubject = await new Subject({
+        const newSubject = new Subject({
             ...req.body
         })
 
