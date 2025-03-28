@@ -14,7 +14,20 @@ const sendSuccess = (res, message, data) => {
     })
 };
 
+const generateOTP = (length) => {
+    let otp = [];
+    
+    for(let i = 0; i < length; i++){
+        let generatotp = Math.round(Math.random() * 9);
+        otp += generatotp;
+    }
+    
+    return otp;
+    };
+
+
 module.exports = {
     sendError,
-    sendSuccess
+    sendSuccess,
+    generateOTP
 }

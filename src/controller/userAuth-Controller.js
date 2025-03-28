@@ -1,8 +1,10 @@
-const { sendError, sendSuccess } = require("../middleware");
+const { sendError, sendSuccess, generateOTP } = require("../middleware");
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require("../model/User");
+const verificationToken = require("../model/verificationToken");
+const { isValidObjectId } = require("mongoose");
 
 
 const loginProcess = async (req, res, next) => {
@@ -31,21 +33,103 @@ const loginAttempt = async (req, res, next) => {
         if (!isPasswordCorrect) {
             return sendError(res, 'Invalid password provided');
         }
+        req.body = { checkuserExist, password };
+        next();
+        // return sendSuccess(res, "successfully login", checkuserExist);
+    } catch (error) {
+        return sendError(res, 'Something when wrong', 500);
+    }
+};
 
-        const loginToken = jwt.sign({ userId: checkuserExist._id },
-            process.env.JWT_USER_SECRET, { expiresIn: '1d' });
 
-        res.cookie(String(checkuserExist._id), loginToken, {
+const generateVerificationToken = async (req, res, next) => {
+    const { checkuserExist } = req.body;
+
+    const otp = generateOTP(6);
+    const hashToken = bcrypt.hashSync(otp);
+
+    const existingUserVToken = await verificationToken.findOne({owner: checkuserExist._id});
+    if(existingUserVToken){
+        try {
+            await verificationToken.findByIdAndDelete(existingUserVToken._id);
+        } catch (error) {
+            console.log(error);
+            console.log('Unable to verify that there is no token already generate for this admin.');
+        } 
+        return sendError(res, 'Something went wrong, please try againnnnnn.');
+    }
+
+    const newVerificationToken = new verificationToken({
+        owner: checkuserExist._id,
+        token: hashToken
+    });
+
+    try{
+        await newVerificationToken.save()
+        req.body = { checkuserExist, otp };
+        next()
+    } catch (error) {
+        console.log(error);
+        console.log('Unable to verify that there is token already generate for this admin.')
+        return sendError(res, 'Unable to login. Something went wrong', 500);  
+    }
+};
+
+//Verifying the user LOGIN with the OTP/ID
+const verifyLogin = async (req, res, next) => {
+    const {otp} = req.body;
+    const {userId} = req.params;
+
+    if(!isValidObjectId(userId)){
+        return sendError(res, 'Invalid ID supplied, please try again.');
+    };
+    
+
+    try {
+        const userToken = await verificationToken.findOne({owner: userId});
+        if(!userToken){
+            return sendError(res, 'No login attempt detected. Please try again');
+        };
+
+        const hashToken = userToken.token;
+        const isTokenCorrect = bcrypt.compareSync(otp, hashToken);
+        if(!isTokenCorrect){
+            return sendError(res, 'Please provide a valid token. Please try again');   
+        };
+
+        try {
+            const user = await User.findById(userId);
+            req.body = { user };
+           // return sendSuccess(res, 'Successfully confirm otp.', admin)
+            next();
+        } catch (error) {
+            console.log(error);
+            return sendError(res, 'Invalid token provided.', 500); 
+        }
+    } catch (error) {
+        console.log(error);
+        return sendError(res, 'Unable to verify login. Something went wrong.', 500);
+    }
+};
+
+//Authenticating the user Login credentials
+const loginUserIn = (req, res, next) => {
+    const { user } = req.body;
+
+    //Encoding the user payload
+    const loginToken = jwt.sign({userId: user._id}, 
+        process.env.JWT_USER_SECRET, {expiresIn: '1d'});
+
+        //Creating both server/browser cookies
+        res.cookie(String(user._id), loginToken, {
             path: '/',
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
             httpOnly: true,
             sameSite: 'lax'
         });
 
-        return sendSuccess(res, "successfully login", checkuserExist);
-    } catch (error) {
-        return sendError(res, 'Something when wrong', 500);
-    }
+        return sendSuccess(res, "authorization successful", user);
+    
 };
 
 
@@ -177,6 +261,9 @@ const resetPassword = async (req, res, next) => {
 module.exports = {
     loginProcess,
     loginAttempt,
+    generateVerificationToken,
+    verifyLogin,
+    loginUserIn,
     verifyLoginUserToken,
     logOut,
     forgetPasswordToken,
