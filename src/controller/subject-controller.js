@@ -121,8 +121,8 @@ const fetchAllSubject = async (req, res) => {
 
         const data = {
             allSubjects: {
-                metadata: { totalCount: allSubjects[0].metadata[0].totalCount, page, pageSize },
-                data: allSubjects[0].data,
+                metadata: { totalCount: allSubjects[0]?.metadata[0]?.totalCount, page, pageSize },
+                data: allSubjects[0]?.data,
             },
         };
 

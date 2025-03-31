@@ -92,8 +92,8 @@ const fetchAllTeacher = async (req, res) => {
 
           const data = {
             allTeacherProfiles: {
-                metadata: { totalCount: allTeacherProfiles[0].metadata[0].totalCount, page, pageSize },
-                data: allTeacherProfiles[0].data,
+                metadata: { totalCount: allTeacherProfiles[0]?.metadata[0]?.totalCount, page, pageSize },
+                data: allTeacherProfiles[0]?.data,
               },
           };
 
