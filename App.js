@@ -17,6 +17,7 @@ const subjectRouter = require('./src/router/subject-router');
 const corsOptions = {
     credentials: true,
     origin: [
+       'http://localhost:3000',
       `http://localhost:${process.env.PORT_ORIGIN}`,
       'https://edureach-psi.vercel.app'
       ]
@@ -80,6 +81,7 @@ const helmetConfig = {
         "'self'",
         "https://accounts.google.com",
         "https://oauth2.googleapis.com",
+         "http://localhost:3000",
         "http://localhost:5173", // Local Frontend
         "https://edureach-psi.vercel.app", // Production Frontend
       ],
