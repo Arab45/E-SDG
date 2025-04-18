@@ -48,6 +48,7 @@ app.use('/teacher', teacherProfile);
 app.use('/api', libraryRouter);
 app.use('/api', subjectRouter);
 
+//preventing API from cross site scripting attacks
 
 const helmetConfig = {
   contentSecurityPolicy: {
@@ -110,6 +111,7 @@ const helmetConfig = {
 
 // Apply Helmet Middleware
 app.use(helmet(helmetConfig));
+// app.use(helmet({ contentSecurityPolicy: false }));
 
 
 

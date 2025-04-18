@@ -17,10 +17,14 @@ router.get('/google/callback',
     passport.authenticate('google', {
         failureRedirect: '/auth/google/failure',
         session: true 
-    }),   (req, res) => {
-        const accessToken = req.user.accessToken;
-        const clientURL = process.env.CLIENT_URL || "http://localhost:5173";
-        res.redirect(`${clientURL}?token=${accessToken}`);
+    }),   (req, res, next) => {
+        try {
+            const accessToken = req.user.accessToken;
+            const clientURL = process.env.CLIENT_URL || "http://localhost:5173";
+            res.redirect(`${clientURL}?token=${accessToken}`);
+        } catch (error) {
+            next(error)
+        }
     }
 );
 
